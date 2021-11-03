@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Digitador</title>
+</head>
+
+<body>
+    <textarea style="width: 100%; height:100px" id="textoBase" placeholder="cole aqui o texto base"></textarea>
+    <textarea style="width: 100%; height:20px" id="textoIdeia"
+        placeholder="cole aqui o texto a ser continuado"></textarea>
+    <input type="number" id="numeroDePalavras">
+    <button onclick="carregarTextoBase()">Carregar Texto Base</button>
+    <button id="botaoContinuarTexto" style="display:none" onclick="continuarTexto()">Continuar Texto</button>
+    <p id="textoResultado"></p>
+    <script>
+        let redeNeural = {};
+        let redeNeuralDict = [];
+        function carregarTextoBase() {
+            let textoBase = document.getElementById("textoBase").value;
+            textoBaseVetor = textoBase.split(" ");
+            console.log(textoBaseVetor);
+            for (let k = 0; k < textoBaseVetor.length - 1; k++) {
+                if (redeNeural[textoBaseVetor[k]] == undefined) {
+                    redeNeural[textoBaseVetor[k]] = [];
+                    redeNeuralDict.push(textoBaseVetor[k]);
+                }
+                redeNeural[textoBaseVetor[k]].push(textoBaseVetor[k + 1]);
+                
+            }
+
+
+            console.log(redeNeural);
+            document.getElementById("botaoContinuarTexto").style.display="";
+        }
+
+        function continuarTexto() {
+            let numeroDePalavras = document.getElementById("numeroDePalavras").value;
+            let palavraAtual = "";
+            let texto = "";
+            let textoComplemento = document.getElementById("textoIdeia").value.split(" ");
+            let ultimaPalavra = textoComplemento[textoComplemento.length - 1];
+            if (redeNeural[ultimaPalavra] != undefined) {
+
+                let ultimaPalavra2 = ultimaPalavra;
+                ultimaPalavra = redeNeural[ultimaPalavra][getRandomMax(redeNeural[ultimaPalavra].length - 1)];
+                texto = capitalizeFirstLetter(ultimaPalavra2) + " " + ultimaPalavra;
+
+            } else {
+                ultimaPalavra = redeNeural[redeNeuralDict[getRandomMax(redeNeuralDict.length - 1)]][0]
+
+                texto = texto + capitalizeFirstLetter(ultimaPalavra);
+
+            }
+            for (let k = 0; k < numeroDePalavras; k++) {
+                ultimaPalavra = redeNeural[ultimaPalavra][getRandomMax(redeNeural[ultimaPalavra].length - 1)];
+
+                texto = texto + " " + ultimaPalavra;
+
+            }
+            texto=texto+".";
+            document.getElementById("textoResultado").innerText=texto;
+        }
+
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function getRandomMax(max) {
+            min = 0;
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function isPrimeiraLetraMaiscula(string) {
+            if (string[0].toUpperCase() == string[0]) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+
+
+    </script>
+</body>
+
+</html>
