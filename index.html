@@ -21,7 +21,7 @@
         let redeNeuralDict = [];
         function carregarTextoBase() {
             let textoBase = document.getElementById("textoBase").value;
-            textoBaseVetor = textoBase.split(" ");
+            textoBaseVetor = textoBase.split(".");
             console.log(textoBaseVetor);
             for (let k = 0; k < textoBaseVetor.length - 1; k++) {
                 if (redeNeural[textoBaseVetor[k]] == undefined) {
@@ -58,7 +58,7 @@
             for (let k = 0; k < numeroDePalavras; k++) {
                 ultimaPalavra = redeNeural[ultimaPalavra][getRandomMax(redeNeural[ultimaPalavra].length - 1)];
 
-                texto = texto + " " + ultimaPalavra;
+                texto = texto + "." + ultimaPalavra;
 
             }
             texto=texto+".";
